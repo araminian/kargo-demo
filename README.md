@@ -449,7 +449,7 @@ So if we want to implement this:
 - We need to find a way to generate manifests in the `stage`. Challenges:
   - not possible to use `Skaffold` since we can't use custom steps, and have to use predefined steps.
   - A lot of `ENVs` to be set!
-  - Clone the service repo in the `stage`, but which commit? it can be hard since image might be built based on previous commit! or make our charts versioned and put them to the `Chart Museum` and use them in the `stage`.
+  - Clone the service repo in the `stage`, but which commit? it can be hard since image might be built based on previous commit! or make our charts versioned and put them to the `Chart Museum` and use them in the `stage`. but then we need to handle the `values files` for each service.
 - Integration tests should be run as `Argo Rollouts Analysis`, Challenges:
   - We don't have visibility to steps or it's hard to access them!
   - IAM permission to access GCS bucket for storing test results!
