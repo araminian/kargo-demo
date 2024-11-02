@@ -4,6 +4,7 @@ metadata:
   name: go-foo
   namespace: argocd
 spec:
+  goTemplate: true
   generators:
   - list:
       elements:
@@ -11,18 +12,18 @@ spec:
       - stage: prod
   template:
     metadata:
-      name: go-foo-{{stage}}
+      name: go-foo-{{.stage}}
       annotations:
-        kargo.akuity.io/authorized-stage: go-foo:{{stage}}
+        kargo.akuity.io/authorized-stage: go-foo:{{.stage}}
     spec:
       project: default
       source:
-        repoURL: https://github.com/araminian/kargo-demo 
+        repoURL: https://github.com/araminian/kargo-demo
         targetRevision: gitops
-        path: {{stage}}
+        path: ./{{.stage}}
       destination:
         server: https://kubernetes.default.svc
-        namespace: go-foo-{{stage}}
+        namespace: go-foo-{{.stage}}
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
