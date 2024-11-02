@@ -9,16 +9,24 @@ cluster-delete:
   minikube delete
 
 kargo-install:
-  helm install kargo \
-    oci://ghcr.io/akuity/kargo-charts/kargo \
-    --namespace kargo \
-    --create-namespace \
-    --set api.adminAccount.passwordHash='$2a$10$Zrhhie4vLz5ygtVSaif6o.qN36jgs6vjtMBdM6yrU1FOeiAAMMxOm' \
-    --set api.adminAccount.tokenSigningKey=iwishtowashmyirishwristwatch \
-    --wait
+  helm upgrade --install kargo \
+  oci://ghcr.io/akuity/kargo-charts/kargo \
+  --namespace kargo \
+  --create-namespace \
+  --set api.service.type=NodePort \
+  --set api.service.nodePort=31444 \
+  --set api.adminAccount.passwordHash='$2a$10$Zrhhie4vLz5ygtVSaif6o.qN36jgs6vjtMBdM6yrU1FOeiAAMMxOm' \
+  --set api.adminAccount.tokenSigningKey=iwishtowashmyirishwristwatch \
+  --wait
 
 kargo-delete:
   helm uninstall kargo --namespace kargo
+
+kargo-forward:
+  minikube service -n kargo kargo-api --url
+
+kargo-password:
+  @kubectl -n kargo get secret kargo-api -o jsonpath="{.data.ADMIN_ACCOUNT_TOKEN_SIGNING_KEY}" | base64 -d
 
 cert-manager-install:
   helm repo add jetstack https://charts.jetstack.io --force-update
@@ -40,7 +48,11 @@ argocd-delete:
   kubectl delete namespace argocd
 
 argocd-admin-password:
-  kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+  @kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+argocd-forward: (argocd-admin-password)
+  @echo ""
+  @kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 argorollouts-install:
   kubectl create namespace argo-rollouts
