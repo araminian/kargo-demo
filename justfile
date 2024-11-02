@@ -1,5 +1,5 @@
 build:
- cd services/foo && VERSION=1.0.2 skaffold build
+ cd services/foo && VERSION=1.0.3 skaffold build
 
 
 cluster-init:
@@ -17,6 +17,9 @@ kargo-install:
   --set api.service.nodePort=31444 \
   --set api.adminAccount.passwordHash='$2a$10$Zrhhie4vLz5ygtVSaif6o.qN36jgs6vjtMBdM6yrU1FOeiAAMMxOm' \
   --set api.adminAccount.tokenSigningKey=iwishtowashmyirishwristwatch \
+  --set controller.argocd.integrationEnabled=true \
+  --set controller.argocd.namespace=argocd \
+  --set controller.argocd.watchArgocdNamespaceOnly=true \
   --wait
 
 kargo-delete:

@@ -27,18 +27,23 @@ spec:
       - uses: helm-update-image
         as: update-image
         config:
-          path: ./main/services/foo/ci/deployment-values/stage.yaml
+          path:  ./main/ci/charts/app/values.yaml
           images:
           - image: rminz/go-app-foo
+            fromOrigin:
+              kind: Warehouse
+              name: go-foo
             key: image.tag
             value: Tag
       - uses: helm-template 
         config:
           path: ./main/ci/charts/app
+          releaseName: go-foo-stage
+          namespace: go-foo-stage
           valuesFiles:
             - ./main/services/foo/ci/deployment-values/stage.yaml
             - ./main/ci/charts/app/values.yaml
-          outputPath: ./gitops/stage/manifests.yaml
+          outPath: ./gitops/stage/manifests.yaml
       - uses: git-commit
         as: commit
         config:
