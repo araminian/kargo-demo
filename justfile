@@ -63,3 +63,6 @@ argorollouts-install:
 
 argorollouts-delete:
   kubectl delete namespace argo-rollouts
+
+image-load ENV:
+  minikube image load rminz/go-app-foo:{{ENV}}
