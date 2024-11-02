@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup just
+        uses: extractions/setup-just@v1
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set Up Kubernetes Tools
+        uses: yokawasa/action-setup-kube-tools@v0.8.3
+        with:
+          skaffold: "2.0.1"
+          helm: "3.10.0"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: rminz
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Setup Skaffold Cache
+        uses: actions/cache@v3.0.11
+        with:
+          path: ~/.skaffold/
+          key: skaffold-cache-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            skaffold-cache-${{ github.ref_name }}-${{ github.sha }}
+            skaffold-cache-${{ github.ref_name }}
+            skaffold-cache-
+
+      - name: Build and Push
+        run: |-
+          just build

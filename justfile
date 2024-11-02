@@ -1,3 +1,7 @@
+build:
+  VERSION=1.0 skaffold build -f services/foo/skaffold.yaml
+
+
 cluster-init:
   minikube start --cpus 4 --memory 8192 --driver docker
 
