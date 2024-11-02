@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: go-foo
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - stage: stage
+      - stage: prod
+  template:
+    metadata:
+      name: go-foo-{{stage}}
+      annotations:
+        kargo.akuity.io/authorized-stage: go-foo:{{stage}}
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/araminian/kargo-demo 
+        targetRevision: gitops
+        path: {{stage}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: go-foo-{{stage}}
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
