@@ -1,0 +1,13 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: go-foo
+  namespace: go-foo
+spec:
+  interval: 10s
+  subscriptions:
+  - image:
+      strictSemvers: true
+      repoURL: rminz/go-app-foo
+      semverConstraint: ^1.0.0
+      discoveryLimit: 5
