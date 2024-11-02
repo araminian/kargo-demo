@@ -7,7 +7,7 @@ spec:
   interval: 10s
   subscriptions:
   - image:
-      strictSemvers: true
+      strictSemvers: false
       repoURL: rminz/go-app-foo
       semverConstraint: ^1.0.0
       discoveryLimit: 5
