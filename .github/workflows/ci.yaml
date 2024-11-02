@@ -41,3 +41,4 @@ jobs:
       - name: Build and Push
         run: |-
           just build
+        working-directory: services/foo
