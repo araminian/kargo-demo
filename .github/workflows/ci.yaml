@@ -28,17 +28,6 @@ jobs:
           username: rminz
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Setup Skaffold Cache
-        uses: actions/cache@v3.0.11
-        with:
-          path: ~/.skaffold/
-          key: skaffold-cache-${{ github.ref_name }}-${{ github.sha }}
-          restore-keys: |
-            skaffold-cache-${{ github.ref_name }}-${{ github.sha }}
-            skaffold-cache-${{ github.ref_name }}
-            skaffold-cache-
-
       - name: Build and Push
         run: |-
           just build
-        working-directory: services/foo
