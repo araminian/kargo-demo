@@ -20,6 +20,8 @@ kargo-install:
   --set controller.argocd.integrationEnabled=true \
   --set controller.argocd.namespace=argocd \
   --set controller.argocd.watchArgocdNamespaceOnly=true \
+  --set controller.rollouts.integrationEnabled=true \
+  --set api.rollouts.integrationEnabled=true \
   --wait
 
 kargo-delete:
