@@ -1,5 +1,5 @@
 build:
- cd services/foo && VERSION=1.0.3 skaffold build
+ cd services/foo && VERSION=1.0.4 skaffold build
 
 
 cluster-init:

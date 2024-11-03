@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: go-foo-stage-test
+  namespace: go-foo
+spec:
+  metrics:
+  - name: integration-test
+    provider:
+      job:
+        spec:
+          backoffLimit: 1
+          template:
+            spec:
+              containers:
+              - name: test
+                image: alpine/curl
+                command:
+                - curl
+                - go-foo-stage-app.go-foo-stage.svc.cluster.local:3000/pass
+              restartPolicy: Never
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: go-foo-prod-test
+  namespace: go-foo
+spec:
+  metrics:
+  - name: integration-test
+    provider:
+      job:
+        spec:
+          backoffLimit: 1
+          template:
+            spec:
+              containers:
+              - name: test
+                image: alpine/curl
+                command:
+                - curl
+                - go-foo-prod-app.go-foo-prod.svc.cluster.local:3000/pass
+              restartPolicy: Never

@@ -1,18 +1,19 @@
 apiVersion: kargo.akuity.io/v1alpha1
 kind: Stage
 metadata:
-  name: stage
+  name: prod
   namespace: go-foo
 spec:
   verification:
     analysisTemplates:
-    - name: go-foo-stage-test
+    - name: go-foo-prod-test
   requestedFreight:
   - origin:
       kind: Warehouse
       name: go-foo
     sources:
-      direct: true
+      stages:
+        - stage
   promotionTemplate:
     spec:
       steps:
@@ -26,7 +27,7 @@ spec:
             path: ./gitops
       - uses: git-clear
         config:
-          path: ./gitops/stage
+          path: ./gitops/prod
       - uses: helm-update-image
         as: update-image
         config:
@@ -41,26 +42,26 @@ spec:
       - uses: helm-template 
         config:
           path: ./main/ci/charts/app
-          releaseName: go-foo-stage
-          namespace: go-foo-stage
+          releaseName: go-foo-prod
+          namespace: go-foo-prod
           valuesFiles:
-            - ./main/services/foo/ci/deployment-values/stage.yaml
+            - ./main/services/foo/ci/deployment-values/prod.yaml
             - ./main/ci/charts/app/values.yaml
-          outPath: ./gitops/stage/manifests.yaml
+          outPath: ./gitops/prod/manifests.yaml
       - uses: git-commit
         as: commit
         config:
-          path: ./gitops/stage
+          path: ./gitops/prod
           messageFromSteps:
           - update-image
       - uses: git-push
         config:
-          path: ./gitops/stage
+          path: ./gitops/prod
           targetBranch: gitops
       - uses: argocd-update
         config:
           apps:
-          - name: go-foo-stage
+          - name: go-foo-prod
             sources:
             - repoURL: https://github.com/araminian/kargo-demo
               desiredCommitFromStep: commit
