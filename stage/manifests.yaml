@@ -63,7 +63,7 @@ spec:
         - name: app
           securityContext:
             {}
-          image: "rminz/go-app-foo:1.0.4"
+          image: "rminz/go-app-foo:1.0.5"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
