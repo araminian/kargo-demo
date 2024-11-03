@@ -7,4 +7,4 @@ spec:
   - stage: stage
     autoPromotionEnabled: true
   - stage: prod
-    autoPromotionEnabled: false
+    autoPromotionEnabled: true

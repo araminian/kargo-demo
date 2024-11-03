@@ -17,7 +17,8 @@ spec:
                 image: alpine/curl
                 command:
                 - curl
-                - go-foo-stage-app.go-foo-stage.svc.cluster.local:3000/pass
+                - -f
+                - go-foo-stage-app.go-foo-stage.svc.cluster.local:3000/fail
               restartPolicy: Never
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -39,5 +40,6 @@ spec:
                 image: alpine/curl
                 command:
                 - curl
+                - -f
                 - go-foo-prod-app.go-foo-prod.svc.cluster.local:3000/pass
               restartPolicy: Never

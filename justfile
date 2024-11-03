@@ -1,5 +1,5 @@
 build:
- cd services/foo && VERSION=1.0.5 skaffold build
+ cd services/foo && VERSION=1.0.6 skaffold build
 
 
 cluster-init:
@@ -57,7 +57,7 @@ argocd-admin-password:
 
 argocd-forward: (argocd-admin-password)
   @echo ""
-  @kubectl port-forward svc/argocd-server -n argocd 8080:443
+  @kubectl port-forward svc/argocd-server -n argocd 8081:443
 
 argorollouts-install:
   kubectl create namespace argo-rollouts
